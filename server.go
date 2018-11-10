@@ -21,12 +21,12 @@ func upload(w http.ResponseWriter, r *http.Request) {
 	buf := bytes.NewBuffer(nil)
 	io.Copy(buf, file)
 
-	err = os.Mkdir(path, 0755)
+	err = os.Mkdir(*path, 0755)
 	if err != nil {
 		log.Panic(err)
 	}
 
-	err = ioutil.WriteFile(path+handler.Filename, buf.Bytes(), 0755)
+	err = ioutil.WriteFile(*path+handler.Filename, buf.Bytes(), 0755)
 	if err != nil {
 		log.Panic(err)
 	}
