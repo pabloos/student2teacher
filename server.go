@@ -1,33 +1,40 @@
 package main
 
 import (
-	"bytes"
-	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
-	"os"
 )
 
-//funcion para manejar el archivo subido
-func upload(w http.ResponseWriter, r *http.Request) {
-	file, handler, err := r.FormFile("file")
-	if err != nil {
-		log.Panic(err)
+const (
+	protocol = ":http"
+	htmldir  = "public"
+)
+
+type server struct {
+	dirPath string
+	router  *http.ServeMux
+}
+
+func newServer(dirPath string) *server {
+	s := &server{
+		dirPath: dirPath,
+		router:  http.NewServeMux(),
 	}
 
-	defer file.Close()
+	defer s.routes()
 
-	buf := bytes.NewBuffer(nil)
-	io.Copy(buf, file)
+	return s
+}
 
-	err = os.Mkdir(*path, 0755)
-	if err != nil {
-		log.Panic(err)
-	}
+func (s *server) routes() {
+	log.Print("Setting routes")
+	files := http.FileServer(http.Dir(htmldir))
 
-	err = ioutil.WriteFile(*path+handler.Filename, buf.Bytes(), 0755)
-	if err != nil {
-		log.Panic(err)
-	}
+	s.router.Handle("/", files)
+	s.router.HandleFunc("/upload", getUploadHandler(s.dirPath))
+}
+
+func (s *server) serve() {
+	log.Print("Starting the server")
+	log.Fatal(http.ListenAndServe(protocol, s.router))
 }
