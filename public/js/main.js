@@ -1,25 +1,35 @@
+//endpoints
 const uploadEndpoint = "/upload";
 
-let input = document.querySelector('form input');
+//selectors
+const inputSelector  = 'form input';
+const buttonSelector = 'button';
+const textSelector   = 'form p';
 
-input.onchange = function() {
-    document.querySelector('form p').innerHTML = input.files.length + ' files added';
+let input = document.querySelector(inputSelector);
+
+input.onchange = () => {
+    document.querySelector(textSelector).innerHTML = input.files.length + ' files added';
 }
 
-document.querySelector('button').onclick = function() {
+document.querySelector(buttonSelector).onclick = () => {
     let data = new FormData();
+
+    if(input.files.length < 1) {
+        alert("You have not selected any files")
+        return
+    }
+
     data.append('file', input.files[0]);
 
     upload(data);
 }
 
-function upload(file) {
-
-    console.log("subiendo");
+const upload = (file) => {
     const request = {
         method: 'POST',
         body: file
     }
 
-    fetch(uploadEndpoint, request)
+    fetch(uploadEndpoint, request);
 } 
