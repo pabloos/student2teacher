@@ -1,10 +1,7 @@
-laguage: go
+language: go
 
 go:
   - master
 
-install: true
-
 script:
-  - go vet
   - go test ./... -coverprofile=coverage.out && go tool cover -func=coverage.out
