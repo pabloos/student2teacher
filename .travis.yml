@@ -1,0 +1,6 @@
+laguage: go
+
+go:
+  - master
+
+script: go test -v ./...
