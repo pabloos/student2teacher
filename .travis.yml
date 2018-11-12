@@ -3,4 +3,8 @@ laguage: go
 go:
   - master
 
-script: go test -v
+install: true
+
+script:
+  - go vet
+  - go test ./... -coverprofile=coverage.out && go tool cover -func=coverage.out
