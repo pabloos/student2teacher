@@ -3,4 +3,4 @@ laguage: go
 go:
   - master
 
-script: go test -v student2teacher
+script: go test -v
