@@ -1,0 +1,23 @@
+version: "3.5"
+
+services:
+  builder:
+    container_name: builder
+    build: .
+
+    volumes:
+      - "./:/go/src/app"
+
+  app:
+    container_name: std2tch
+    image: alpine:latest
+
+    volumes:
+      - "./:/app"
+    
+    ports:
+      - "80:80"
+
+    working_dir: /app
+
+    command: "./std2tch.linux.latest"
